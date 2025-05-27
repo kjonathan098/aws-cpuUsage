@@ -2,26 +2,29 @@ import { NextFunction, Request, Response } from 'express'
 import { AppError } from '../appErrorClass'
 import { respondSuccess } from '../utils/respondSuccess'
 import getEC2IdFromIp from '../helpers/getEc2IdFromIp'
-import createEC2Client from '../utils/createEc2Client'
 import getCpuUsage from '../helpers/getCpuUssage'
+import sortDataPoints from '../utils/sortDataPoints'
 
 const getCpuMetrics = async (req: Request, res: Response, next: NextFunction) => {
+	const ipAddress = req.body.ipAddress
+	const timePeriod = req.body.timePeriod
+	const intervals = req.body.intervals
+
 	try {
-		// create ec2 client
-		const ec2 = createEC2Client()
+		if (!ipAddress || !timePeriod || !intervals) throw new AppError('Missing required inputs: ipAddress, timePeriod, intervals', 400)
 
 		// get ec2 instance id from Ip
-		const ec2ID = await getEC2IdFromIp(ec2)
+		const ec2ID = await getEC2IdFromIp(ipAddress)
 
-		if (!ec2ID) {
-			throw new Error('EC2 id not found ')
-		}
+		if (!ec2ID) throw new AppError('EC2 id not found', 404)
 
-		const cpuUssage = await getCpuUsage(ec2ID)
+		const cpuUssage = await getCpuUsage(ec2ID, timePeriod, intervals)
 
-		console.log('🚀 ~ getCpuMetrics ~ cpuUssage:', cpuUssage.Datapoints)
+		if (!cpuUssage.Datapoints?.length) throw new Error('No data points collected')
 
-		respondSuccess(res, 'hero')
+		const sortedDataPoints = sortDataPoints(cpuUssage.Datapoints)
+
+		respondSuccess(res, sortedDataPoints)
 	} catch (error: any) {
 		next(new AppError(error.message || 'Error fetching metrics', error.status))
 	}

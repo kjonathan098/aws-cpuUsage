@@ -1,10 +1,10 @@
 import { GetMetricStatisticsCommand } from '@aws-sdk/client-cloudwatch'
 import createCloudWatchClient from '../utils/createCloudWatchClient'
 
-const getCpuUsage = async (instanceId: string) => {
-	// TODO - change start date to users req
-	const now = new Date()
-	const start = new Date(now.getTime() - 1000 * 60 * 60) // 1 hour ago
+const getCpuUsage = async (instanceId: string, timePeriod: number, intervals: number) => {
+	// TODO - change start date and period to users req
+	const endTime = new Date()
+	const startTime = new Date(endTime.getTime() - timePeriod)
 
 	const command = new GetMetricStatisticsCommand({
 		Namespace: 'AWS/EC2',
@@ -15,9 +15,9 @@ const getCpuUsage = async (instanceId: string) => {
 				Value: instanceId,
 			},
 		],
-		StartTime: start,
-		EndTime: now,
-		Period: 300, // 5 minutes
+		StartTime: startTime,
+		EndTime: endTime,
+		Period: intervals,
 		Statistics: ['Average'],
 		Unit: 'Percent',
 	})
