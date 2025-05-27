@@ -20,7 +20,9 @@ const getCpuMetrics = async (req: Request, res: Response, next: NextFunction) =>
 
 		const cpuUssage = await getCpuUsage(ec2ID, timePeriod, intervals)
 
-		if (!cpuUssage.Datapoints?.length) throw new Error('No data points collected')
+		if (!cpuUssage.Datapoints?.length) {
+			throw new AppError('No data points collected', 400)
+		}
 
 		const sortedDataPoints = sortDataPoints(cpuUssage.Datapoints)
 

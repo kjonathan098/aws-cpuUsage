@@ -2,7 +2,6 @@ import { GetMetricStatisticsCommand } from '@aws-sdk/client-cloudwatch'
 import createCloudWatchClient from '../utils/createCloudWatchClient'
 
 const getCpuUsage = async (instanceId: string, timePeriod: number, intervals: number) => {
-	// TODO - change start date and period to users req
 	const endTime = new Date()
 	const startTime = new Date(endTime.getTime() - timePeriod)
 
