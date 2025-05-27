@@ -3,6 +3,7 @@ import { AppError } from '../appErrorClass'
 import { respondSuccess } from '../utils/respondSuccess'
 import getEC2IdFromIp from '../helpers/getEc2IdFromIp'
 import createEC2Client from '../utils/createEc2Client'
+import getCpuUsage from '../helpers/getCpuUssage'
 
 const getCpuMetrics = async (req: Request, res: Response, next: NextFunction) => {
 	try {
@@ -11,6 +12,14 @@ const getCpuMetrics = async (req: Request, res: Response, next: NextFunction) =>
 
 		// get ec2 instance id from Ip
 		const ec2ID = await getEC2IdFromIp(ec2)
+
+		if (!ec2ID) {
+			throw new Error('EC2 id not found ')
+		}
+
+		const cpuUssage = await getCpuUsage(ec2ID)
+
+		console.log('🚀 ~ getCpuMetrics ~ cpuUssage:', cpuUssage.Datapoints)
 
 		respondSuccess(res, 'hero')
 	} catch (error: any) {

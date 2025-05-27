@@ -1,8 +1,7 @@
 import { DescribeInstancesCommand, EC2Client } from '@aws-sdk/client-ec2'
-import { AppError } from '../appErrorClass'
 
 const getEC2IdFromIp = async (ec2: EC2Client) => {
-	const ip = null
+	const ip = process.env.IP_ADDRESS
 
 	if (!ip) {
 		throw Error('Missing AWS IP address')
