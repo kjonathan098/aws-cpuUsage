@@ -105,7 +105,7 @@ const startingTime = createListCollection({
 		{ label: 'Last 24 Hours', value: `${3600 * 24}` },
 		{ label: 'Last 7 Days', value: `${3600 * 24 * 7}` },
 		{ label: 'Last Month', value: `${3600 * 24 * 30}` },
-		{ label: 'Last 3 Months', value: `${3600 * 24 * 90}` },
+		// { label: 'Last 3 Months', value: `${3600 * 24 * 90}` },
 	],
 })
 

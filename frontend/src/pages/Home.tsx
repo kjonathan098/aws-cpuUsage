@@ -5,16 +5,25 @@ import AWSInputFields from '../components/AWSInputs/AwsInputFields'
 import axios from 'axios'
 import type { AWSDataPoints, AwsForm, ErrorResponse, SuccessResponse } from '@/types/types'
 
+export interface testing {
+	chartData: AWSDataPoints[]
+	timeIntervals: string
+}
+
 const Home = () => {
-	const [chartData, setChartData] = useState<AWSDataPoints[]>([])
+	const [chartData, setChartData] = useState<testing | null>()
 	const [error, setError] = useState<string | null>(null)
 	const [loading, setLoading] = useState(false)
 
 	const fetchCpuUssage = async (form: AwsForm) => {
+		setError(null)
 		setLoading(true)
 		try {
 			const res = await axios.post<SuccessResponse>('http://localhost:4000/api/cpuMetric', form)
-			setChartData(res.data.message)
+
+			console.log('🚀 ~ fetchCpuUssage ~ res:', res.data.message)
+
+			setChartData({ chartData: res.data.message, timeIntervals: form.intervals })
 		} catch (error) {
 			if (axios.isAxiosError<ErrorResponse>(error)) {
 				setError(error.response?.data.message || 'Something went wrong')
@@ -41,7 +50,7 @@ const Home = () => {
 					</Center>
 				)}
 				{error && <Text color="red.500">{error}</Text>}
-				{chartData.length > 0 && <CpuChart chartData={chartData} />}
+				{chartData && <CpuChart chartData={chartData} />}
 			</Box>
 		</>
 	)

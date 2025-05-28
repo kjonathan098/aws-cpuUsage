@@ -3,7 +3,13 @@ import createCloudWatchClient from '../utils/createCloudWatchClient'
 
 const getCpuUsage = async (instanceId: string, timePeriod: number, intervals: number) => {
 	const endTime = new Date()
+
+	console.log('🚀 ~ getCpuUsage ~ endTime:', endTime)
+
 	const startTime = new Date(Date.now() - timePeriod * 1000)
+
+	console.log('🚀 ~ getCpuUsage ~ startTime:', startTime)
+
 	const command = new GetMetricStatisticsCommand({
 		Namespace: 'AWS/EC2',
 		MetricName: 'CPUUtilization',
