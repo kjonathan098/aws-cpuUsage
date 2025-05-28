@@ -1,10 +1,11 @@
 import { Button, HStack } from '@chakra-ui/react'
+import Home from './Home'
 
 function App() {
 	return (
-		<HStack>
-			<Button bg={'red'}>Hello</Button>
-		</HStack>
+		<>
+			<Home />
+		</>
 	)
 }
 
