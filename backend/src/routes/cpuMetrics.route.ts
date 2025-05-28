@@ -3,6 +3,6 @@ import cpuMetricsController from '../controllers/cpuMetrics.controller'
 
 const cpuMetricsRouter = express.Router()
 
-cpuMetricsRouter.get('/', cpuMetricsController.getCpuMetrics)
+cpuMetricsRouter.post('/', cpuMetricsController.getCpuMetrics)
 
 export default cpuMetricsRouter
