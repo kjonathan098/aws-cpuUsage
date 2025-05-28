@@ -1,5 +1,5 @@
 import { Button, HStack } from '@chakra-ui/react'
-import Home from './Home'
+import Home from './pages/Home'
 
 function App() {
 	return (
