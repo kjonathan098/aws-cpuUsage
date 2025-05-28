@@ -1,6 +1,6 @@
-import type { testing } from '@/pages/Home'
+import type { ChartDataPayload } from '@/pages/Home'
 
-export const getChartDataPoints = (chartData: testing) => {
+export const getChartDataPoints = (chartData: ChartDataPayload) => {
 	const chartDataPoints = {
 		labels: chartData.chartData.map((d) => new Date(d.Timestamp)), // x-axis values
 		datasets: [
@@ -15,4 +15,3 @@ export const getChartDataPoints = (chartData: testing) => {
 	}
 	return chartDataPoints
 }
-

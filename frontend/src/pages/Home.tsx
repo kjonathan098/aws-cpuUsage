@@ -1,29 +1,28 @@
-import { Box, Center, HStack, Spinner, Text } from '@chakra-ui/react'
-import React, { useEffect, useState } from 'react'
+import { Box, Center, Spinner, Text } from '@chakra-ui/react'
+import { useState } from 'react'
 import CpuChart from '../components/CpuChart/CpuChart'
 import AWSInputFields from '../components/AWSInputs/AwsInputFields'
 import axios from 'axios'
-import type { AWSDataPoints, AwsForm, ErrorResponse, SuccessResponse } from '@/types/types'
+import type { AWSDataPoints, AwsForm, ErrorResponse } from '@/types/types'
+import { fetchCpuUsage } from '../api/cpuService'
 
-export interface testing {
+export interface ChartDataPayload {
 	chartData: AWSDataPoints[]
 	timeIntervals: string
 }
 
 const Home = () => {
-	const [chartData, setChartData] = useState<testing | null>()
+	const [chartData, setChartData] = useState<ChartDataPayload | null>()
 	const [error, setError] = useState<string | null>(null)
 	const [loading, setLoading] = useState(false)
 
-	const fetchCpuUssage = async (form: AwsForm) => {
+	const handleFetch = async (form: AwsForm) => {
 		setError(null)
 		setLoading(true)
+		setChartData(null)
 		try {
-			const res = await axios.post<SuccessResponse>('http://localhost:4000/api/cpuMetric', form)
-
-			console.log('🚀 ~ fetchCpuUssage ~ res:', res.data.message)
-
-			setChartData({ chartData: res.data.message, timeIntervals: form.intervals })
+			const res = await fetchCpuUsage(form)
+			setChartData({ chartData: res.message, timeIntervals: form.intervals })
 		} catch (error) {
 			if (axios.isAxiosError<ErrorResponse>(error)) {
 				setError(error.response?.data.message || 'Something went wrong')
@@ -41,7 +40,7 @@ const Home = () => {
 				Header
 			</Box>
 			<Box>
-				<AWSInputFields fetchCpuUssage={fetchCpuUssage} />
+				<AWSInputFields handleFetch={handleFetch} />
 			</Box>
 			<Box>
 				{loading && (

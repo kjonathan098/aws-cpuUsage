@@ -5,9 +5,9 @@ import axios from 'axios'
 import type { AwsForm } from '@/types/types'
 
 interface IProps {
-	fetchCpuUssage: (form: AwsForm) => Promise<void>
+	handleFetch: (form: AwsForm) => Promise<void>
 }
-const AWSInputFields = ({ fetchCpuUssage }: IProps) => {
+const AWSInputFields = ({ handleFetch }: IProps) => {
 	const [form, setForm] = useState({
 		ipAddress: '172.31.88.161',
 		timePeriod: '',
@@ -27,7 +27,7 @@ const AWSInputFields = ({ fetchCpuUssage }: IProps) => {
 			window.alert('Missing field')
 			return
 		}
-		fetchCpuUssage(form)
+		handleFetch(form)
 	}
 
 	return (
@@ -35,7 +35,7 @@ const AWSInputFields = ({ fetchCpuUssage }: IProps) => {
 			<HStack p={4} justifyItems={'center'}>
 				<Field.Root invalid={!form.ipAddress.length}>
 					<Field.Label>IP Address</Field.Label>
-					<Input placeholder="Enter your email" onChange={(e) => handleChange('ipAddress', e.target.value)} value={form.ipAddress} />
+					<Input placeholder="Enter your IP address" onChange={(e) => handleChange('ipAddress', e.target.value)} value={form.ipAddress} />
 					<Field.ErrorText>This field is required</Field.ErrorText>
 				</Field.Root>
 
@@ -105,7 +105,9 @@ const startingTime = createListCollection({
 		{ label: 'Last 24 Hours', value: `${3600 * 24}` },
 		{ label: 'Last 7 Days', value: `${3600 * 24 * 7}` },
 		{ label: 'Last Month', value: `${3600 * 24 * 30}` },
-		// { label: 'Last 3 Months', value: `${3600 * 24 * 90}` },
+		{ label: 'Last 3 Months', value: `${3600 * 24 * 90}` },
+		{ label: 'Last 6 Months', value: `${3600 * 24 * 180}` },
+		{ label: 'Last 1 Year', value: `${3600 * 24 * 365}` },
 	],
 })
 
