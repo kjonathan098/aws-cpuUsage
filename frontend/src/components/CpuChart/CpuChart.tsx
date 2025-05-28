@@ -3,12 +3,13 @@ import { Chart as ChartJS, LineElement, CategoryScale, LinearScale, PointElement
 import { mockData } from '../../utils/mockData'
 import { Box, Center } from '@chakra-ui/react'
 import 'chartjs-adapter-date-fns'
+import type { AWSDataPoints } from '@/types/types'
 
 ChartJS.register(LineElement, CategoryScale, LinearScale, PointElement, Tooltip, Legend, TimeScale)
 
-const CpuChart = () => {
-	const chartData = {
-		labels: mockData.map((d) => new Date(d.Timestamp)),
+const CpuChart = ({ chartData }: { chartData: AWSDataPoints[] }) => {
+	const chartDataPoints = {
+		labels: chartData.map((d) => new Date(d.Timestamp)),
 		datasets: [
 			{
 				label: 'CPU Utilization (%)', // Name shown in legend / tooltip
@@ -50,7 +51,7 @@ const CpuChart = () => {
 	return (
 		<Center>
 			<Box width={'80%'}>
-				<Line data={chartData} options={options} />
+				<Line data={chartDataPoints} options={options} />
 			</Box>
 		</Center>
 	)

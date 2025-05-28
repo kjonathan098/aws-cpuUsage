@@ -2,7 +2,12 @@ import { useEffect, useState } from 'react'
 import { Box, Button, Center, Field, HStack, Input } from '@chakra-ui/react'
 import { Portal, Select, createListCollection } from '@chakra-ui/react'
 import axios from 'axios'
-const AWSInputFields = () => {
+import type { AwsForm } from '@/types/types'
+
+interface IProps {
+	fetchCpuUssage: (form: AwsForm) => Promise<void>
+}
+const AWSInputFields = ({ fetchCpuUssage }: IProps) => {
 	const [form, setForm] = useState({
 		ipAddress: '172.31.88.161',
 		timePeriod: '',
@@ -22,10 +27,7 @@ const AWSInputFields = () => {
 			window.alert('Missing field')
 			return
 		}
-		console.log(form)
-		const res = await axios.post('http://localhost:4000/api/cpuMetric', form)
-
-		console.log('🚀 ~ handleSubmit ~ res:', res)
+		fetchCpuUssage(form)
 	}
 
 	return (
