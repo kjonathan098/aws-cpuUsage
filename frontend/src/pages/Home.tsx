@@ -3,16 +3,11 @@ import { useState } from 'react'
 import CpuChart from '../components/CpuChart/CpuChart'
 import AWSInputFields from '../components/AWSInputs/AwsInputFields'
 import axios from 'axios'
-import type { AWSDataPoints, AwsForm, ErrorResponse } from '@/types/types'
+import type { AWSDataPoints, AwsForm, ChartDataPayload, ErrorResponse } from '@/types/types'
 import { fetchCpuUsage } from '../api/cpuService'
 import faddomLogo from '../assets/faddom-main-logo.svg'
 import ErrorMessage from '../components/Error/ErrorMessage'
 import PageTitle from '../components/HomeTitlle/HomeTittle'
-
-export interface ChartDataPayload {
-	chartData: AWSDataPoints[]
-	timeIntervals: string
-}
 
 const Home = () => {
 	const [chartData, setChartData] = useState<ChartDataPayload | null>()

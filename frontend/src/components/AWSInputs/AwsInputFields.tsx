@@ -1,20 +1,22 @@
 import { useState } from 'react'
 import { Box, Button, Field, HStack, Input } from '@chakra-ui/react'
-import { Portal, Select, createListCollection } from '@chakra-ui/react'
+import { Portal, Select } from '@chakra-ui/react'
 import type { AwsForm } from '@/types/types'
 import { validateIP } from '../../utils/validateIP'
+import { startingTime, timeIntervals } from '../../utils/awsSelectOptions'
 
 interface IProps {
 	handleFetch: (form: AwsForm) => Promise<void>
 	isLoading: boolean
 }
 const AWSInputFields = ({ handleFetch, isLoading }: IProps) => {
+	const [validIP, setValidIP] = useState(false)
+
 	const [form, setForm] = useState({
 		ipAddress: '',
 		timePeriod: '',
 		intervals: '',
 	})
-	const [validIP, setValidIP] = useState(false)
 
 	const handleChange = (key: string, value: string) => {
 		setForm((prev) => ({
@@ -110,26 +112,5 @@ const AWSInputFields = ({ handleFetch, isLoading }: IProps) => {
 		</form>
 	)
 }
-
-const startingTime = createListCollection({
-	items: [
-		{ label: 'Last Hour', value: `${3600}` },
-		{ label: 'Last 24 Hours', value: `${3600 * 24}` },
-		{ label: 'Last 7 Days', value: `${3600 * 24 * 7}` },
-		{ label: 'Last Month', value: `${3600 * 24 * 30}` },
-		{ label: 'Last 3 Months', value: `${3600 * 24 * 90}` },
-		{ label: 'Last 6 Months', value: `${3600 * 24 * 180}` },
-		{ label: 'Last 1 Year', value: `${3600 * 24 * 365}` },
-	],
-})
-
-const timeIntervals = createListCollection({
-	items: [
-		{ label: 'Every 5 Minutes', value: `${300}` },
-		{ label: 'Every Hour', value: `${3600}` },
-		{ label: 'Every Day', value: `${86400}` },
-		{ label: 'Every Month', value: `${2592000}` },
-	],
-})
 
 export default AWSInputFields

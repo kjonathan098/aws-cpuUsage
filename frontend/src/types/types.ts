@@ -19,3 +19,8 @@ export interface AwsForm {
 	timePeriod: string
 	intervals: string
 }
+
+export interface ChartDataPayload {
+	chartData: AWSDataPoints[]
+	timeIntervals: string
+}
