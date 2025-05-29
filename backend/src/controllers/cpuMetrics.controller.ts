@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express'
-import { AppError } from '../appErrorClass'
+import { AppError } from '../utils/appErrorClass'
 import { respondSuccess } from '../utils/respondSuccess'
 import getEC2IdFromIp from '../helpers/getEc2IdFromIp'
 import getCpuUsage from '../helpers/getCpuUssage'
@@ -16,7 +16,7 @@ const getCpuMetrics = async (req: Request, res: Response, next: NextFunction) =>
 		// get ec2 instance id from Ip
 		const ec2ID = await getEC2IdFromIp(ipAddress)
 
-		if (!ec2ID) throw new AppError('EC2 id not found', 404)
+		if (!ec2ID) throw new AppError('EC2 ID not found', 404)
 
 		const cpuUssage = await getCpuUsage(ec2ID, timePeriod, intervals)
 

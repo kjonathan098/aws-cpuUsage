@@ -1,5 +1,5 @@
 import { EC2Client } from '@aws-sdk/client-ec2'
-import { AppError } from '../appErrorClass'
+import { AppError } from './appErrorClass'
 
 const createEC2Client = () => {
 	if (!process.env.AWS_ACCESS_ID || !process.env.AWS_SECRET_ACCESS_KEY || !process.env.REGION) throw new AppError('Missing AWS credentials', 500)

@@ -1,7 +1,7 @@
 import express from 'express'
 import dotenv from 'dotenv'
 import cpuMetricsRouter from './routes/cpuMetrics.route'
-import errorHandler from './errorHandler'
+import errorHandler from './middleware/errorHandler'
 import cors from 'cors'
 
 dotenv.config()
