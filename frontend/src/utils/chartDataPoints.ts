@@ -1,4 +1,4 @@
-import type { ChartDataPayload } from '@/pages/Home'
+import type { ChartDataPayload } from '@/types/types'
 
 export const getChartDataPoints = (chartData: ChartDataPayload) => {
 	const chartDataPoints = {
