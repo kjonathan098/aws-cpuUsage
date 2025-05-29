@@ -1,13 +1,13 @@
-import { Alert, Box, Center, Image, Spinner, Stack, Text } from '@chakra-ui/react'
+import { Box, Center, Image, Stack } from '@chakra-ui/react'
 import { useState } from 'react'
 import CpuChart from '../components/CpuChart/CpuChart'
 import AWSInputFields from '../components/AWSInputs/AwsInputFields'
 import axios from 'axios'
 import type { AWSDataPoints, AwsForm, ErrorResponse } from '@/types/types'
 import { fetchCpuUsage } from '../api/cpuService'
-import sailBoat from '../assets/sailBoat.gif'
-import title from '../assets/title.png'
+import faddomLogo from '../assets/faddom-main-logo.svg'
 import ErrorMessage from '../components/Error/ErrorMessage'
+import PageTitle from '../components/HomeTitlle/HomeTittle'
 
 export interface ChartDataPayload {
 	chartData: AWSDataPoints[]
@@ -39,7 +39,9 @@ const Home = () => {
 
 	return (
 		<Stack h={'100vh'}>
-			<Box bg={'blue.400'} h={'50px'}></Box>
+			<Box bg={'blue.400'} h={'50px'} p={2}>
+				<Image src={faddomLogo} height={'40px'} />
+			</Box>
 			<Box>
 				<AWSInputFields handleFetch={handleFetch} isLoading={loading} />
 			</Box>
@@ -49,13 +51,7 @@ const Home = () => {
 						<ErrorMessage error={error} />
 					</Center>
 				)}
-				{!chartData && !error && (
-					<Center>
-						<Stack>
-							<Image src={sailBoat} h={'auto'} w={'300px'} />
-						</Stack>
-					</Center>
-				)}
+				{!chartData && !error && !loading && <PageTitle />}
 				{chartData && <CpuChart chartData={chartData} />}
 			</Box>
 		</Stack>
