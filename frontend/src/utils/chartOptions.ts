@@ -1,6 +1,7 @@
 import type { ChartOptions } from 'chart.js'
 
 const getTimeUnit = (interval: number) => {
+	if (interval >= 2592000) return 'month'
 	if (interval >= 86400) return 'day'
 	if (interval >= 3600) return 'hour'
 	return 'minute'

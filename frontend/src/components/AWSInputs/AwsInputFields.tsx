@@ -1,18 +1,20 @@
-import { useEffect, useState } from 'react'
-import { Box, Button, Center, Field, HStack, Input } from '@chakra-ui/react'
+import { useState } from 'react'
+import { Box, Button, Field, HStack, Input } from '@chakra-ui/react'
 import { Portal, Select, createListCollection } from '@chakra-ui/react'
-import axios from 'axios'
 import type { AwsForm } from '@/types/types'
+import { validateIP } from '../../utils/validateIP'
 
 interface IProps {
 	handleFetch: (form: AwsForm) => Promise<void>
+	isLoading: boolean
 }
-const AWSInputFields = ({ handleFetch }: IProps) => {
+const AWSInputFields = ({ handleFetch, isLoading }: IProps) => {
 	const [form, setForm] = useState({
-		ipAddress: '172.31.88.161',
+		ipAddress: '',
 		timePeriod: '',
 		intervals: '',
 	})
+	const [validIP, setValidIP] = useState(false)
 
 	const handleChange = (key: string, value: string) => {
 		setForm((prev) => ({
@@ -22,9 +24,14 @@ const AWSInputFields = ({ handleFetch }: IProps) => {
 	}
 
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+		setValidIP(false)
 		e.preventDefault()
 		if (!form.ipAddress || !form.timePeriod || !form.intervals) {
 			window.alert('Missing field')
+			return
+		}
+		if (!validateIP(form.ipAddress)) {
+			setValidIP(true)
 			return
 		}
 		handleFetch(form)
@@ -32,15 +39,20 @@ const AWSInputFields = ({ handleFetch }: IProps) => {
 
 	return (
 		<form onSubmit={handleSubmit}>
-			<HStack p={4} justifyItems={'center'}>
-				<Field.Root invalid={!form.ipAddress.length}>
+			<HStack p={4} justifyItems={'center'} align="end">
+				<Field.Root required invalid={validIP}>
 					<Field.Label>IP Address</Field.Label>
-					<Input placeholder="Enter your IP address" onChange={(e) => handleChange('ipAddress', e.target.value)} value={form.ipAddress} />
-					<Field.ErrorText>This field is required</Field.ErrorText>
+					<Box position="relative" w={'100%'}>
+						<Input size="sm" placeholder="Enter your IP address" onChange={(e) => handleChange('ipAddress', e.target.value)} value={form.ipAddress} />
+
+						<Field.ErrorText position="absolute" top="100%" left={0} fontSize="xs" color="red.500">
+							Invalid IP Address
+						</Field.ErrorText>
+					</Box>
 				</Field.Root>
 
 				{/* STARTING TIME SELECTOR  */}
-				<Select.Root collection={startingTime} size="sm" onValueChange={(val) => handleChange('timePeriod', val.value[0])}>
+				<Select.Root collection={startingTime} size="sm" onValueChange={(val) => handleChange('timePeriod', val.value[0])} required>
 					<Select.HiddenSelect />
 					<Select.Label>Starting Time</Select.Label>
 					<Select.Control>
@@ -66,7 +78,7 @@ const AWSInputFields = ({ handleFetch }: IProps) => {
 				</Select.Root>
 
 				{/* TIME INTERVAL SELECTOR */}
-				<Select.Root collection={timeIntervals} size="sm" onValueChange={(val) => handleChange('intervals', val.value[0])}>
+				<Select.Root collection={timeIntervals} size="sm" onValueChange={(val) => handleChange('intervals', val.value[0])} required>
 					<Select.HiddenSelect />
 					<Select.Label>Time Intervals</Select.Label>
 					<Select.Control>
@@ -91,7 +103,7 @@ const AWSInputFields = ({ handleFetch }: IProps) => {
 					</Portal>
 				</Select.Root>
 
-				<Button type="submit" size={'sm'}>
+				<Button type="submit" size={'sm'} bg={'#f9b509'} loading={isLoading}>
 					Fetch CPU Usage
 				</Button>
 			</HStack>
@@ -116,6 +128,7 @@ const timeIntervals = createListCollection({
 		{ label: 'Every 5 Minutes', value: `${300}` },
 		{ label: 'Every Hour', value: `${3600}` },
 		{ label: 'Every Day', value: `${86400}` },
+		{ label: 'Every Month', value: `${2592000}` },
 	],
 })
 
